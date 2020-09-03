@@ -14,9 +14,6 @@ def delete_keypair():
         pass
 
 def delete_instance():
-    ec2 = boto3.client('ec2',
-                       region_name="us-west-2",
-                       )
 
     with open('instance_ids.csv', mode='r') as instance_id_file:
         instance_reader_rows = csv.reader(instance_id_file, delimiter=',', quotechar='"')
@@ -24,6 +21,10 @@ def delete_instance():
             response = ec2.terminate_instances(InstanceIds=row)
 
     os.system('rm ~/PycharmProjects/instance_ids.csv')
+
+ec2 = boto3.client('ec2',
+                    region_name="us-west-2",
+                    )
 
 delete_keypair()
 delete_instance()
