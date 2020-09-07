@@ -12,9 +12,11 @@ def create_keypair():
         outkey = key_pair['KeyMaterial']
         outfile.write(outkey)
 
+    os.system('chmod 400 ~/PycharmProjects/UK_Hydrology_Data_Engineering/venv/code_repository/HydroEC2pair.pem')
+
 def delete_keypair():
     try:
-        os.system('rm ~/PycharmProjects/HydroEC2pair.pem')
+        os.system('rm ~/PycharmProjects/UK_Hydrology_Data_Engineering/venv/code_repository/HydroEC2pair.pem')
     except:
         pass
     try:
@@ -31,13 +33,13 @@ ec2 = boto3.client('ec2',
 delete_keypair()
 create_keypair()
 
-os.system('chmod 400 ~/PycharmProjects/HydroEC2pair.pem')
 response = ec2.run_instances(
     ImageId='ami-0a07be880014c7b8e',
     InstanceType='t2.micro',
     KeyName='HydroEC2pair',
-    MaxCount=2,
+    MaxCount=1,
     MinCount=1,
+    UserData=open("launch_script.sh", "r")
 )
 
 InstanceIds = []
