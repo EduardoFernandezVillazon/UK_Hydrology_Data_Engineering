@@ -1,3 +1,4 @@
 #!/bin/bash
 
-echo("testing functionality")
+echo "testing functionality"
+yum update

@@ -39,7 +39,7 @@ response = ec2.run_instances(
     KeyName='HydroEC2pair',
     MaxCount=1,
     MinCount=1,
-    UserData=open("launch_script.sh", "r")
+    UserData=open("launch_script.sh", "r").read()
 )
 
 InstanceIds = []
