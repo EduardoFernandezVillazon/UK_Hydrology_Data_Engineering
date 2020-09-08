@@ -34,7 +34,7 @@ delete_keypair()
 create_keypair()
 
 response = ec2.run_instances(
-    ImageId='ami-0a07be880014c7b8e',
+    ImageId='ami-0ba60995c1589da9d', #ami-0a07be880014c7b8e
     InstanceType='t2.micro',
     KeyName='HydroEC2pair',
     MaxCount=1,
