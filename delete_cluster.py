@@ -23,5 +23,6 @@ with open('instance_ids.csv', mode='r') as instance_id_file:
         response = ec2.terminate_instances(InstanceIds=row)
 
 os.system('rm ~/PycharmProjects/UK_Hydrology_Data_Engineering/venv/code_repository/instance_ids.csv')
+os.system('rm ~/PycharmProjects/UK_Hydrology_Data_Engineering/venv/code_repository/instance_public_dns.csv')
 
 delete_keypair()

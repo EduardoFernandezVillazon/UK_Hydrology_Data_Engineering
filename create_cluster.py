@@ -14,6 +14,7 @@ def create_keypair():
 
     os.system('chmod 400 ~/PycharmProjects/UK_Hydrology_Data_Engineering/venv/code_repository/HydroEC2pair.pem')
 
+
 def delete_keypair():
     try:
         os.system('rm ~/PycharmProjects/UK_Hydrology_Data_Engineering/venv/code_repository/HydroEC2pair.pem')
@@ -23,6 +24,18 @@ def delete_keypair():
         ec2.delete_key_pair(KeyName='HydroEC2pair')
     except:
         pass
+
+
+def save_instance_ids():
+    instance_ids = []
+    for instance in response['Instances']:
+        instance_ids.append(instance['InstanceId'])
+
+    with open('instance_ids.csv', mode='a') as instance_id_file:
+        instance_writer = csv.writer(instance_id_file, delimiter=',', quotechar='"')
+        instance_writer.writerow(instance_ids)
+    return instance_ids
+
 
 ec2 = boto3.client('ec2',
                    region_name="us-west-2",
@@ -42,12 +55,18 @@ response = ec2.run_instances(
     UserData=open("launch_script.sh", "r").read()
 )
 
-InstanceIds = []
-for instance in response['Instances']:
-    InstanceIds.append(instance['InstanceId'])
+InstanceIds = save_instance_ids()
 
-# config.set('EC2INSTANCE', 'ids', str(InstanceIds))
+waiter = ec2.get_waiter('instance_running')
+waiter.wait(InstanceIds=InstanceIds)
 
-with open('instance_ids.csv', mode='a') as instance_id_file:
-    instance_writer = csv.writer(instance_id_file, delimiter=',', quotechar='"')
-    instance_writer.writerow(InstanceIds)
+response = ec2.describe_instances(InstanceIds=InstanceIds)
+
+InstancePublicDNS_Name = []
+for reservation in response['Reservations']:
+    for instance in reservation['Instances']:
+        InstancePublicDNS_Name.append(instance['PublicDnsName'])
+
+with open('instance_public_dns.csv', mode='a') as instance_dns_file:
+    instance_writer = csv.writer(instance_dns_file, delimiter=',', quotechar='"')
+    instance_writer.writerow(InstancePublicDNS_Name)
