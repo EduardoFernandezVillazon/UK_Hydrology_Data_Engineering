@@ -24,5 +24,6 @@ with open('instance_ids.csv', mode='r') as instance_id_file:
 
 os.system('rm ~/PycharmProjects/UK_Hydrology_Data_Engineering/venv/code_repository/instance_ids.csv')
 os.system('rm ~/PycharmProjects/UK_Hydrology_Data_Engineering/venv/code_repository/instance_public_dns.csv')
+os.system('rm ~/PycharmProjects/UK_Hydrology_Data_Engineering/venv/code_repository/secure_shell_command.sh')
 
 delete_keypair()
